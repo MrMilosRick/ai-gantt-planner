@@ -30,9 +30,9 @@ class PlannerAgent:
             tasks = self.tools.run(action)
             applied.append(action)
 
-        reply = "Applied requested plan change." if applied else "No plan change was needed."
+        reply = "Изменения применены." if applied else "Изменений не требуется."
         if applied and applied[-1].get("tool") == "list_tasks":
-            reply = f"There are {len(tasks)} tasks in the current plan."
+            reply = f"В текущем плане задач: {len(tasks)}."
         return ChatResponse(reply=reply, actions=applied, tasks=tasks)
 
     def _actions_from_llm(self, message: str) -> list[dict[str, Any]]:
@@ -79,6 +79,14 @@ class PlannerAgent:
         dependency = re.search(r"\b(T\d+)\b\s+зависит\s+от\s+\b(T\d+)\b", text, flags=re.IGNORECASE)
         if not dependency:
             dependency = re.search(r"сделай\s+\b(T\d+)\b\s+зависим(?:ой|ым)\s+от\s+\b(T\d+)\b", text, flags=re.IGNORECASE)
+        if not dependency:
+            dependency = re.search(
+                r"сделай\s+так,?\s+чтобы\s+\b(T\d+)\b\s+начиналась\s+после\s+\b(T\d+)\b",
+                text,
+                flags=re.IGNORECASE,
+            )
+        if not dependency:
+            dependency = re.search(r"\b(T\d+)\b\s+должна\s+начинаться\s+после\s+\b(T\d+)\b", text, flags=re.IGNORECASE)
         if dependency:
             return [
                 {

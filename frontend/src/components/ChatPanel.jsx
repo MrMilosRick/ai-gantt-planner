@@ -5,7 +5,7 @@ import { useState } from "react";
 export default function ChatPanel({ onSend, busy }) {
   const [message, setMessage] = useState("");
   const [history, setHistory] = useState([
-    { role: "assistant", text: "Попробуйте: добавь задачу Тестирование на 2 дня, назначь T3 на Анну, сделай T3 зависимой от T2, перенеси T3 после T2." },
+    { role: "assistant", text: "Попробуйте: добавь задачу Тестирование на 2 дня, назначь T3 на Анну, измени длительность T3 на 4 дня, сделай так, чтобы T3 начиналась после T2." },
   ]);
 
   async function submit(event) {
