@@ -10,7 +10,7 @@ export default function GanttView({ tasks, onSelectTask }) {
   return (
     <div className="gantt">
       <div className="gantt-header" style={{ gridTemplateColumns: `220px repeat(${totalDays}, ${DAY_WIDTH}px)` }}>
-        <div className="task-column">Task</div>
+        <div className="task-column">Задача</div>
         {Array.from({ length: totalDays }, (_, index) => {
           const date = addDays(minDate, index);
           return (
@@ -35,11 +35,12 @@ export default function GanttView({ tasks, onSelectTask }) {
             </span>
             <span
               className="bar"
+              title={task.assignee || "Не назначен"}
               style={{
                 gridColumn: `${offset + 2} / span ${task.duration}`,
               }}
             >
-              {task.assignee || "Unassigned"}
+              {task.assignee || "Не назначен"}
             </span>
           </button>
         );

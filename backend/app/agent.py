@@ -76,6 +76,34 @@ class PlannerAgent:
             title = re.sub(r"\s+for\s+\d+\s+days?.*$", "", title, flags=re.IGNORECASE).strip()
             return [{"tool": "add_task", "args": {"task": title or "New task", "duration": duration}}]
 
+        dependency = re.search(r"\b(T\d+)\b\s+зависит\s+от\s+\b(T\d+)\b", text, flags=re.IGNORECASE)
+        if not dependency:
+            dependency = re.search(r"сделай\s+\b(T\d+)\b\s+зависим(?:ой|ым)\s+от\s+\b(T\d+)\b", text, flags=re.IGNORECASE)
+        if dependency:
+            return [
+                {
+                    "tool": "set_dependencies",
+                    "args": {"id": dependency.group(1).upper(), "predecessors": [dependency.group(2).upper()]},
+                }
+            ]
+
+        move = re.search(r"(?:перенеси|поставь)\s+\b(T\d+)\b\s+после\s+\b(T\d+)\b", text, flags=re.IGNORECASE)
+        if move:
+            return [
+                {
+                    "tool": "move_task",
+                    "args": {"id": move.group(1).upper(), "after_task_id": move.group(2).upper()},
+                }
+            ]
+
+        reassign = re.search(r"назначь\s+\b(T\d+)\b\s+на\s+(.+)$", text, flags=re.IGNORECASE)
+        if not reassign:
+            reassign = re.search(r"поставь\s+исполнителя\s+\b(T\d+)\b\s+(.+)$", text, flags=re.IGNORECASE)
+        if reassign:
+            assignee = reassign.group(2).strip()
+            if assignee:
+                return [{"tool": "update_task", "args": {"id": reassign.group(1).upper(), "assignee": assignee}}]
+
         if "длительность" in lower or lower.startswith("сделай"):
             task_id = _extract_task_id(text)
             duration = _extract_duration(lower)
