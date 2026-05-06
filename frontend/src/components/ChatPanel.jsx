@@ -5,7 +5,7 @@ import { useState } from "react";
 export default function ChatPanel({ onSend, busy }) {
   const [message, setMessage] = useState("");
   const [history, setHistory] = useState([
-    { role: "assistant", text: "Try: add QA review for 2 days, list tasks, or set T3 duration to 4 days." },
+    { role: "assistant", text: "Попробуйте: добавь задачу Тестирование на 2 дня, покажи задачи, измени длительность T3 на 4 дня." },
   ]);
 
   async function submit(event) {
@@ -37,7 +37,7 @@ export default function ChatPanel({ onSend, busy }) {
           value={message}
           disabled={busy}
           onChange={(event) => setMessage(event.target.value)}
-          placeholder="Ask the planner to change the schedule"
+          placeholder="Попросите изменить план..."
         />
         <button type="submit" disabled={busy || !message.trim()} aria-label="Send message">
           <Send size={18} />

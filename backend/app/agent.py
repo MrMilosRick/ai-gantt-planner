@@ -61,14 +61,26 @@ class PlannerAgent:
         text = message.strip()
         lower = text.lower()
 
-        if "list" in lower or "show" in lower:
+        if "list" in lower or "show" in lower or "покажи задачи" in lower or "список задач" in lower:
             return [{"tool": "list_tasks", "args": {}}]
+
+        if lower.startswith("добавь задачу") or lower.startswith("добавить задачу"):
+            duration = _extract_duration(lower)
+            title = re.sub(r"^добав(?:ь|ить)\s+задачу\s+", "", text, flags=re.IGNORECASE)
+            title = re.sub(r"\s+на\s+\d+\s+д(?:ень|ня|ней).*$", "", title, flags=re.IGNORECASE).strip()
+            return [{"tool": "add_task", "args": {"task": title or "Новая задача", "duration": duration}}]
 
         if lower.startswith("add"):
             duration = _extract_duration(lower)
             title = re.sub(r"^add\s+", "", text, flags=re.IGNORECASE)
             title = re.sub(r"\s+for\s+\d+\s+days?.*$", "", title, flags=re.IGNORECASE).strip()
             return [{"tool": "add_task", "args": {"task": title or "New task", "duration": duration}}]
+
+        if "длительность" in lower or lower.startswith("сделай"):
+            task_id = _extract_task_id(text)
+            duration = _extract_duration(lower)
+            if task_id:
+                return [{"tool": "update_task", "args": {"id": task_id, "duration": duration}}]
 
         if "duration" in lower:
             task_id = _extract_task_id(text)
@@ -81,7 +93,7 @@ class PlannerAgent:
 
 
 def _extract_duration(text: str) -> int:
-    match = re.search(r"(\d+)\s+days?", text)
+    match = re.search(r"(\d+)\s+(?:days?|день|дня|дней)", text)
     return int(match.group(1)) if match else 1
 
 
