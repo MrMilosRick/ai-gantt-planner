@@ -102,7 +102,12 @@ class PlannerAgent:
         if reassign:
             assignee = reassign.group(2).strip()
             if assignee:
-                return [{"tool": "update_task", "args": {"id": reassign.group(1).upper(), "assignee": assignee}}]
+                return [
+                    {
+                        "tool": "update_task",
+                        "args": {"id": reassign.group(1).upper(), "assignee": _normalize_assignee_name(assignee)},
+                    }
+                ]
 
         if "длительность" in lower or lower.startswith("сделай"):
             task_id = _extract_task_id(text)
@@ -128,6 +133,17 @@ def _extract_duration(text: str) -> int:
 def _extract_task_id(text: str) -> str | None:
     match = re.search(r"\bT\d+\b", text, flags=re.IGNORECASE)
     return match.group(0).upper() if match else None
+
+
+def _normalize_assignee_name(name: str) -> str:
+    names = {
+        "Анну": "Анна",
+        "Ивана": "Иван",
+        "Петра": "Петр",
+        "Марию": "Мария",
+        "Ольгу": "Ольга",
+    }
+    return names.get(name, name)
 
 
 def _normalize_actions(raw: Any) -> list[dict[str, Any]]:

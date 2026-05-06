@@ -136,13 +136,13 @@ input {
 
 .bar {
   align-self: center;
-  min-width: 92px;
+  min-width: 40px;
   border-radius: 6px;
   background: #2d7dd2;
   color: white;
   padding: 8px 10px;
-  overflow: visible;
-  text-overflow: clip;
+  overflow: hidden;
+  text-overflow: ellipsis;
   white-space: nowrap;
   font-size: 13px;
   line-height: 1.2;
