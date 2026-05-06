@@ -6,10 +6,11 @@ export default function GanttView({ tasks, onSelectTask }) {
   const minDate = dates.length ? new Date(Math.min(...dates)) : new Date();
   const maxDate = dates.length ? new Date(Math.max(...dates)) : new Date();
   const totalDays = Math.max(daysBetween(minDate, maxDate) + 1, 1);
+  const gridColumns = `220px repeat(${totalDays}, ${DAY_WIDTH}px)`;
 
   return (
     <div className="gantt">
-      <div className="gantt-header" style={{ gridTemplateColumns: `220px repeat(${totalDays}, ${DAY_WIDTH}px)` }}>
+      <div className="gantt-header" style={{ gridTemplateColumns: gridColumns }}>
         <div className="task-column">Задача</div>
         {Array.from({ length: totalDays }, (_, index) => {
           const date = addDays(minDate, index);
@@ -26,13 +27,16 @@ export default function GanttView({ tasks, onSelectTask }) {
           <button
             className="gantt-row"
             key={task.id}
-            style={{ gridTemplateColumns: `220px repeat(${totalDays}, ${DAY_WIDTH}px)` }}
+            style={{ gridTemplateColumns: gridColumns }}
             onClick={() => onSelectTask(task)}
           >
             <span className="task-name">
               <strong>{task.id}</strong>
               {task.task}
             </span>
+            {Array.from({ length: totalDays }, (_, index) => (
+              <span className="gantt-cell" key={`${task.id}-${index}`} />
+            ))}
             <span
               className="bar"
               title={task.assignee || "Не назначен"}
@@ -40,7 +44,7 @@ export default function GanttView({ tasks, onSelectTask }) {
                 gridColumn: `${offset + 2} / span ${task.duration}`,
               }}
             >
-              {task.assignee || "Не назначен"}
+              {task.duration <= 1 ? "1 дн." : task.assignee || "Не назначен"}
             </span>
           </button>
         );

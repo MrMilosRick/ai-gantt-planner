@@ -113,7 +113,7 @@ input {
 .gantt-row {
   position: relative;
   width: 100%;
-  min-height: 54px;
+  min-height: 50px;
   border: 0;
   border-top: 1px solid #eef2f4;
   background: white;
@@ -130,21 +130,39 @@ input {
   align-items: center;
   gap: 8px;
   grid-column: 1;
-  padding: 14px 10px;
+  grid-row: 1;
+  min-width: 0;
+  padding: 12px 10px;
   border-right: 1px solid #d8e0e5;
-}
-
-.bar {
-  align-self: center;
-  min-width: 40px;
-  border-radius: 6px;
-  background: #2d7dd2;
-  color: white;
-  padding: 8px 10px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-size: 13px;
+}
+
+.gantt-cell {
+  grid-row: 1;
+  min-height: 50px;
+  border-right: 1px solid #eef2f4;
+}
+
+.bar {
+  z-index: 1;
+  grid-row: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+  min-width: 0;
+  height: 30px;
+  border-radius: 6px;
+  background: #2d7dd2;
+  color: white;
+  padding: 0 6px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 12px;
+  font-weight: 700;
   line-height: 1.2;
 }
 
