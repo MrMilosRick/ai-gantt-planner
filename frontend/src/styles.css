@@ -91,6 +91,7 @@ input {
 
 .gantt-header,
 .gantt-row {
+  box-sizing: border-box;
   display: grid;
   min-width: max-content;
 }
@@ -106,6 +107,7 @@ input {
 
 .task-column,
 .day {
+  box-sizing: border-box;
   border-right: 1px solid #d8e0e5;
   padding: 10px;
 }
@@ -126,6 +128,7 @@ input {
 }
 
 .task-name {
+  box-sizing: border-box;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -140,12 +143,14 @@ input {
 }
 
 .gantt-cell {
+  box-sizing: border-box;
   grid-row: 1;
   min-height: 50px;
   border-right: 1px solid #eef2f4;
 }
 
 .bar {
+  box-sizing: border-box;
   z-index: 1;
   grid-row: 1;
   display: flex;

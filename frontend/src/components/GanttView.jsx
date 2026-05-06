@@ -1,4 +1,5 @@
 import React from 'react';
+const TASK_COLUMN_WIDTH = 260;
 const DAY_WIDTH = 44;
 
 export default function GanttView({ tasks, onSelectTask }) {
@@ -6,7 +7,7 @@ export default function GanttView({ tasks, onSelectTask }) {
   const minDate = dates.length ? new Date(Math.min(...dates)) : new Date();
   const maxDate = dates.length ? new Date(Math.max(...dates)) : new Date();
   const totalDays = Math.max(daysBetween(minDate, maxDate) + 1, 1);
-  const gridColumns = `220px repeat(${totalDays}, ${DAY_WIDTH}px)`;
+  const gridColumns = `${TASK_COLUMN_WIDTH}px repeat(${totalDays}, ${DAY_WIDTH}px)`;
 
   return (
     <div className="gantt">
