@@ -32,20 +32,23 @@ export default function GanttView({ tasks, onSelectTask }) {
             onClick={() => onSelectTask(task)}
           >
             <span className="task-name">
-              <strong>{task.id}</strong>
-              {task.task}
+              <span className="task-title-line">
+                <strong>{task.id}</strong>
+                {task.task}
+              </span>
+              <span className="task-meta">Исполнитель: {task.assignee || "Не назначен"}</span>
             </span>
             {Array.from({ length: totalDays }, (_, index) => (
               <span className="gantt-cell" key={`${task.id}-${index}`} />
             ))}
             <span
               className="bar"
-              title={task.assignee || "Не назначен"}
+              title={`${task.assignee || "Не назначен"}: ${task.start} - ${task.end}, ${task.duration} дн.`}
               style={{
                 gridColumn: `${offset + 2} / span ${task.duration}`,
               }}
             >
-              {task.duration <= 1 ? "1 дн." : task.assignee || "Не назначен"}
+              {task.duration} дн.
             </span>
           </button>
         );
