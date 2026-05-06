@@ -51,8 +51,11 @@ class PlannerAgent:
             temperature=0,
         )
         content = response.choices[0].message.content or "[]"
-        parsed = json.loads(content)
-        return parsed if isinstance(parsed, list) else []
+        try:
+            parsed = json.loads(content)
+        except json.JSONDecodeError:
+            return []
+        return _normalize_actions(parsed)
 
     def _fallback_actions(self, message: str) -> list[dict[str, Any]]:
         text = message.strip()
@@ -85,3 +88,26 @@ def _extract_duration(text: str) -> int:
 def _extract_task_id(text: str) -> str | None:
     match = re.search(r"\bT\d+\b", text, flags=re.IGNORECASE)
     return match.group(0).upper() if match else None
+
+
+def _normalize_actions(raw: Any) -> list[dict[str, Any]]:
+    if isinstance(raw, dict) and "actions" in raw:
+        raw = raw["actions"]
+    if not isinstance(raw, list):
+        return []
+
+    actions: list[dict[str, Any]] = []
+    for action in raw:
+        if not isinstance(action, dict) or "tool" not in action:
+            continue
+
+        normalized = dict(action)
+        if "args" not in normalized and "arguments" in normalized:
+            normalized["args"] = normalized.pop("arguments")
+        if "args" not in normalized:
+            normalized["args"] = {}
+        if not isinstance(normalized["args"], dict):
+            continue
+
+        actions.append(normalized)
+    return actions
