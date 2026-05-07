@@ -119,7 +119,12 @@ Supported agent tools:
 
 ## How AI Assistants Were Used
 
-AI assistants were used to accelerate development, draft the project structure, check architectural options, prepare documentation, and look for implementation issues. Final decisions about MVP boundaries, architecture, verification, and delivery scope were made manually.
+- ChatGPT helped define MVP scope, architecture boundaries, demo flow, README/Roadmap structure, and production trade-offs.
+- Codex was used as a file orchestration assistant for generating and updating focused parts of the codebase and documentation through scoped prompts.
+- Cursor was used for local code navigation and small manual checks where needed.
+- Manual review was applied to all generated changes before commit; the app was tested locally and after deployment.
+
+AI assistants accelerated development, but did not replace engineering responsibility. Scope control, code review, testing, deployment, and final delivery were handled manually.
 
 ## MVP Boundaries
 
