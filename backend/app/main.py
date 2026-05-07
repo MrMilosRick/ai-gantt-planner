@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import os
+
 from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import Response
@@ -11,9 +13,17 @@ from .state import plan_state
 
 app = FastAPI(title="AI Gantt Planner MVP")
 
+allowed_origins = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    "https://ai-gantt-planner-gcz5gi462-milosturbos-projects.vercel.app",
+]
+if os.getenv("FRONTEND_ORIGIN"):
+    allowed_origins.append(os.getenv("FRONTEND_ORIGIN"))
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
+    allow_origins=allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
